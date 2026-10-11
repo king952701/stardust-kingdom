@@ -5315,7 +5315,7 @@ function pushChat(c, txt){
   chatLog.push({c:c, x:txt, t:chatTime()});
   if(chatLog.length>200) chatLog.splice(0, chatLog.length-200);
   const cb = document.getElementById('chatBox');
-  if(cb && cb.offsetParent !== null && cb.offsetParent !== undefined) renderChat();
+  if(cb && cb.offsetParent !== null && cb.offsetParent !== undefined) renderChatList();
 }
 function lastChatOf(c){
   for(let i=chatLog.length-1;i>=Math.max(0,chatLog.length-6);i--){
@@ -5331,7 +5331,7 @@ function pushGatherChat(skid, z, mat, n, t){
     L._n += n; L._t = t; L._ts = now; L.t = chatTime();
     L.x = '采集：'+SKILLS[skid].n+'「'+(z?z.n:'—')+'」 获得 '+MATS[mat].n+' ×'+L._n+'（'+qualityAt(L._t).n+'）';
     const cb = document.getElementById('chatBox');
-    if(cb && cb.offsetParent !== null && cb.offsetParent !== undefined) renderChat();
+    if(cb && cb.offsetParent !== null && cb.offsetParent !== undefined) renderChatList();
     return;
   }
   pushChat(1, '采集：'+SKILLS[skid].n+'「'+(z?z.n:'—')+'」 获得 '+MATS[mat].n+' ×'+n+'（'+qualityAt(t).n+'）');
@@ -5352,7 +5352,7 @@ function pushKillChat(s, m, gold, drops){
     L._ts = now; L.t = chatTime();
     L.x = killChatLine(m, L._c, L._g, L._d);
     const cb = document.getElementById('chatBox');
-    if(cb && cb.offsetParent !== null && cb.offsetParent !== undefined) renderChat();
+    if(cb && cb.offsetParent !== null && cb.offsetParent !== undefined) renderChatList();
     return;
   }
   const acc = {_c:1, _g:gold, _d:{}};
@@ -5811,6 +5811,18 @@ function autoTranslate(text){
   return text; // 临时禁用翻译
 }
 
+// 高频事件（采集/战斗/掉落）只更新消息列表，绝不重建输入框，避免打字被打断
+function renderChatList(){
+  const cb = document.getElementById('chatBox');
+  if(!cb) return;
+  const list = cb.querySelector('.chat-list');
+  if(!list){ renderChat(); return; }
+  const stick = list.scrollHeight - list.scrollTop - list.clientHeight < 50;
+  const blk = (S&&S.blocked)||[];
+  const rows = chatLog.filter(m=>{ if(!(CH.tab===0||m.c===CH.tab)) return false; if(m.c===3){ const mn=(m.x.match(/data-npc="([^"]+)"/)||[])[1]; if(mn && blk.indexOf(mn)>=0) return false; } return true; }).slice(-60);
+  list.innerHTML = rows.map(m=>'<div class="chat-row"><span class="chat-t">'+m.t+'</span><span class="chat-c chat-c'+m.c+'">['+CH_TABS[m.c].n+']</span>'+autoTranslate(m.x)+'</div>').join('');
+  if(stick) list.scrollTop = list.scrollHeight;
+}
 function renderChat(){
   const cb = document.getElementById('chatBox');
   if(!cb) return;
@@ -10122,6 +10134,7 @@ function showAuth(){
   };
 
   document.getElementById('authGuest').onclick = ()=>{
+    localStorage.setItem('stardust_guest', '1');
     auth.remove();
     init();
   };
@@ -10168,9 +10181,10 @@ function showAuth(){
 }
 
 function init(){
-  // 检查是否已登录
+  // 检查是否已登录（游客模式已放行）
   const currentUser = localStorage.getItem('stardust_current_user');
-  if(!currentUser){
+  const isGuest = localStorage.getItem('stardust_guest') === '1';
+  if(!currentUser && !isGuest){
     showAuth();
     return;
   }
@@ -10620,7 +10634,7 @@ document.addEventListener('keydown', function(e){
   bindNetUI();
 })();
 </script>
-<script src="entertainment.js"></script>
+<!-- 娱乐中心已下架（TapTap 审核合规），entertainment.js 不再加载 -->
 <!-- <script src="slot_machine.js"></script> --><!-- 暂关：TapTap审核赌博玩法 -->>
 <script src="ui_collapse.js"></script>
 <script src="resizable.js"></script>
