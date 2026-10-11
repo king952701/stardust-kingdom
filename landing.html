@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#2B2013">
+<title>星屿王国 · 放置传说</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+  background: linear-gradient(135deg, #1a1c20 0%, #2a2d35 50%, #1a1c20 100%);
+  color: #EFE5CF;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.container {
+  text-align: center;
+  padding: 20px;
+  max-width: 500px;
+}
+.logo {
+  width: 150px;
+  height: 150px;
+  margin: 0 auto 30px;
+  background: radial-gradient(circle at 30% 30%, #F5D89A, #E8C46A 40%, #C49A30 100%);
+  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+  box-shadow: 0 0 60px rgba(232, 196, 106, 0.5);
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 60px rgba(232, 196, 106, 0.5); }
+  50% { transform: scale(1.05); box-shadow: 0 0 80px rgba(232, 196, 106, 0.7); }
+}
+h1 {
+  font-size: 36px;
+  font-weight: 800;
+  letter-spacing: 6px;
+  color: #E8C46A;
+  text-shadow: 0 0 20px rgba(232, 196, 106, 0.5);
+  margin-bottom: 10px;
+}
+.subtitle {
+  font-size: 14px;
+  color: #C5B193;
+  letter-spacing: 8px;
+  margin-bottom: 40px;
+}
+.btn-group {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: center;
+}
+.btn {
+  padding: 18px 50px;
+  border-radius: 30px;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border: none;
+  min-width: 240px;
+}
+.btn-primary {
+  background: linear-gradient(135deg, #E8C46A, #C49A30);
+  color: #2B2013;
+  box-shadow: 0 4px 20px rgba(232, 196, 106, 0.4);
+}
+.btn-primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 30px rgba(232, 196, 106, 0.6);
+}
+.btn-secondary {
+  background: rgba(232, 196, 106, 0.1);
+  color: #E8C46A;
+  border: 1px solid rgba(232, 196, 106, 0.3);
+}
+.btn-secondary:hover {
+  background: rgba(232, 196, 106, 0.2);
+}
+.features {
+  margin-top: 50px;
+  text-align: left;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 16px;
+  padding: 20px 25px;
+}
+.features h3 {
+  color: #E8C46A;
+  font-size: 16px;
+  margin-bottom: 15px;
+}
+.features ul {
+  list-style: none;
+}
+.features li {
+  margin: 10px 0;
+  color: #C5B193;
+  font-size: 14px;
+  padding-left: 24px;
+  position: relative;
+}
+.features li:before {
+  content: "✦";
+  position: absolute;
+  left: 0;
+  color: #E8C46A;
+}
+.version {
+  margin-top: 30px;
+  color: #9E8A66;
+  font-size: 12px;
+}
+.github {
+  margin-top: 20px;
+}
+.github a {
+  color: #7FB8FF;
+  text-decoration: none;
+  font-size: 14px;
+}
+.loading {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(135deg, #1a1c20 0%, #2a2d35 50%, #1a1c20 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  transition: opacity 0.5s ease;
+}
+.loading.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 3px solid rgba(232, 196, 106, 0.2);
+  border-top-color: #E8C46A;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 20px;
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+</style>
+</head>
+<body>
+<div class="loading" id="loading">
+  <div class="spinner"></div>
+  <div style="color: #E8C46A; font-size: 16px;">正在加载...</div>
+</div>
+
+<div class="container">
+  <div class="logo"></div>
+  <h1>星屿王国</h1>
+  <p class="subtitle">放 置 传 说</p>
+  
+  <div class="btn-group">
+    <a href="index.html" class="btn btn-primary">开始冒险</a>
+    <a href="https://github.com/king952701/stardust-kingdom" target="_blank" class="btn btn-secondary">GitHub 仓库</a>
+  </div>
+  
+  <div class="features">
+    <h3>游戏特色</h3>
+    <ul>
+      <li>放置类玩法，轻松休闲</li>
+      <li>丰富的装备与技能系统</li>
+      <li>全服排行榜竞争</li>
+      <li>聊天互动社交</li>
+      <li>支持离线游玩</li>
+    </ul>
+  </div>
+  
+  <div class="version">v1.0.0 | 2026</div>
+  <div class="github">
+    <a href="https://github.com/king952701/stardust-kingdom">GitHub</a>
+  </div>
+</div>
+
+<script>
+// 模拟加载后隐藏 loading
+setTimeout(() => {
+  document.getElementById('loading').classList.add('hidden');
+}, 800);
+</script>
+</body>
+</html>
