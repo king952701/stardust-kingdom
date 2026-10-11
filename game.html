@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#2B2013">
+<title>星屿王国 · 放置传说</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow:hidden}
+body{
+  background:linear-gradient(135deg,#1a1c20 0%,#2a2d35 50%,#1a1c20 100%);
+  color:#EFE5CF;
+  font-family:"PingFang SC","Microsoft YaHei","Noto Sans SC",system-ui,sans-serif;
+  font-size:14px;line-height:1.5;
+}
+#errorScreen{
+  position:fixed;inset:0;z-index:9999;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,#1a1c20 0%,#2a2d35 50%,#1a1c20 100%);
+  padding:20px;text-align:center;
+}
+#errorScreen.hidden{display:none}
+#errorScreen h1{font-size:28px;color:#E8C46A;margin-bottom:10px}
+#errorScreen p{color:#C5B193;margin-bottom:30px}
+#errorScreen button{
+  padding:14px 40px;border-radius:25px;
+  background:linear-gradient(135deg,#E8C46A,#C49A30);
+  color:#2B2013;font-size:16px;font-weight:700;cursor:pointer;border:none;
+}
+#errorScreen a{color:#7FB8FF;margin-top:20px;font-size:14px}
+#app{max-width:500px;margin:0 auto;height:100%;display:flex;flex-direction:column;position:relative}
+</style>
+</head>
+<body>
+
+<div id="errorScreen">
+  <h1>星屿王国</h1>
+  <p>放置传说</p>
+  <div id="errorMsg" style="color:#E25C5C;margin-bottom:20px;font-size:12px;display:none"></div>
+  <button onclick="reloadGame()">重新加载</button>
+  <br>
+  <a href="https://github.com/king952701/stardust-kingdom" target="_blank">GitHub 仓库</a>
+</div>
+
+<div id="app" style="display:none">
+  <!-- 游戏内容 -->
+</div>
+
+<script>
+// 错误处理
+window.onerror = function(msg, url, line, col, error) {
+  console.error('Game error:', msg, url, line);
+  const errDiv = document.getElementById('errorMsg');
+  if(errDiv) {
+    errDiv.style.display = 'block';
+    errDiv.textContent = '加载失败: ' + msg;
+  }
+  return false;
+};
+
+// 重试加载
+function reloadGame() {
+  location.reload();
+}
+
+// 检查必需文件
+const requiredFiles = [
+  'entertainment.js',
+  'slot_machine.js',
+  'ui_collapse.js',
+  'resizable.js',
+  'honor.js',
+  'giftcode.js',
+  'cloud_save.js'
+];
+
+let missingFiles = [];
+async function checkFiles() {
+  for(const file of requiredFiles) {
+    try {
+      const resp = await fetch(file, {method: 'HEAD'});
+      if(!resp.ok) missingFiles.push(file);
+    } catch(e) {
+      missingFiles.push(file);
+    }
+  }
+  
+  if(missingFiles.length > 0) {
+    const errDiv = document.getElementById('errorMsg');
+    if(errDiv) {
+      errDiv.style.display = 'block';
+      errDiv.textContent = '缺少文件: ' + missingFiles.join(', ');
+    }
+  } else {
+    // 所有文件存在，显示游戏
+    document.getElementById('errorScreen').classList.add('hidden');
+    document.getElementById('app').style.display = 'flex';
+    loadGame();
+  }
+}
+
+// 加载游戏主文件
+function loadGame() {
+  const script = document.createElement('script');
+  script.src = 'index.html';
+  script.onload = () => {
+    console.log('Game loaded successfully');
+  };
+  script.onerror = () => {
+    const errDiv = document.getElementById('errorMsg');
+    if(errDiv) {
+      errDiv.style.display = 'block';
+      errDiv.textContent = '游戏文件加载失败';
+    }
+  };
+  document.body.appendChild(script);
+}
+
+// 启动检查
+checkFiles();
+</script>
+
+<!-- 加载游戏主 HTML -->
+<iframe src="index.html" style="display:none" id="gameFrame"></iframe>
+
+</body>
+</html>
