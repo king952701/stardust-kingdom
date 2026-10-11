@@ -7,7 +7,7 @@
 if(window.CloudSave) return;
 
 const BMOB_APP_ID = '781648f16e1780758148d4693f8b78a3';
-const BMOB_REST_KEY = 'b7a8ab749bf4bdf2561c631c337e24a7';
+const BMOB_REST_KEY = '662d75cdd74d641dd8efc43b098c6c1e';
 const BMOB_API = 'https://api.bmobcloud.com';
 
 let sessionToken = null;
