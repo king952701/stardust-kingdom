@@ -1,0 +1,25 @@
+# Node
+node_modules/
+package-lock.json
+
+# Data (server runtime)
+星尘王国-联网版/server/data/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Backup / patch / test files (keep source, exclude generated)
+_backup/
+_patch/
+_shots/
+_tower_assets/
+_版号申请/
+*.tmp
+*.out
+tmp_*.js
